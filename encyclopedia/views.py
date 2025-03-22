@@ -24,7 +24,6 @@ def entry_page(request, title):
                 'title': title,
                 'content': content,    
             })
-            
-    else:
-        return render(request, 'encyclopedia/error.html', {'message':'Page not Found!'})
+        
+    return render(request, 'encyclopedia/error.html', {'message':'Page not Found!'})
     
