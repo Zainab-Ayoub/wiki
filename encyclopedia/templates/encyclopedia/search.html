@@ -1,0 +1,20 @@
+{% extends "encyclopedia/layout.html" %}
+
+{% block title %}
+    Search Results
+{% endblock %}
+
+{% block body %}
+    <h1>Search Results for {{query}}</h1>
+    
+    {% if queryArray %}
+        {% for entry in queryArray %}
+        {% comment %} make all entries clickable links {% endcomment %}
+            <li><a href="{% url 'entry' entry %}">{{ entry }}</a></li>
+        {% endfor %}
+    {% else %}
+        No Results Found!    
+    {% endif %}
+        
+
+{% endblock %}
