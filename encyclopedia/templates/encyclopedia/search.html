@@ -9,7 +9,6 @@
     
     {% if queryArray %}
         {% for entry in queryArray %}
-        {% comment %} make all entries clickable links {% endcomment %}
             <li><a href="{% url 'entry' entry %}">{{ entry }}</a></li>
         {% endfor %}
     {% else %}

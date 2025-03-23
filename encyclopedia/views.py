@@ -25,7 +25,9 @@ def entry_page(request, title):
                 'content': content,    
             })
         
-    return render(request, 'encyclopedia/error.html', {'message':'Page not Found!'})
+    return render(request, 'encyclopedia/error.html', {
+        'message':'Page not Found!'
+    })
     
 def search(request):
     # check if function is working
@@ -63,4 +65,31 @@ def search(request):
     
 def new_page(request):
     
+    # print request method
+    print(f"Request Method: {request.method}") 
     
+    if request.method == 'POST':
+        # check if request is received
+        print("POST request received!")
+        title = request.POST.get('title', '').strip()
+        content = request.POST.get('content').strip()
+
+        # print title and content on console
+        print(f"Received Title: {title}")
+        print(f"Received Content: {content}")
+        
+        if not title or not content:
+            return render(request, 'encyclopedia/error.html', {
+                'message' : 'Insufficient Information! Please Try Again.' 
+            })
+            
+        entries = util.list_entries()
+        for entry in entries:
+            if title.lower() == entry.lower():
+                return render(request, 'encyclopedia/error.html', {
+                    'message':'This entry already exists!'
+                })
+        
+        util.save_entry(title, content)
+        
+    return render(request, 'encyclopedia/new_page.html')
