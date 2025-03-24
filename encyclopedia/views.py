@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse
 import markdown2
+import random
 from . import util
 
 def index(request):
@@ -93,8 +94,8 @@ def new_page(request):
                 return render(request, 'encyclopedia/error.html', {
                     'message':'This entry already exists!'
                 })
-        
-        util.save_entry(title, content)
+        formatted_content = f"# {title}\n\n{content}"
+        util.save_entry(title, formatted_content)
         
     return render(request, 'encyclopedia/new_page.html')
 
@@ -126,3 +127,16 @@ def edit_entry(request, title):
         'title': title,
         'content': content
     })
+    
+    
+def random_page(request):
+    # get all entries
+    entries = util.list_entries()
+    if entries:
+        # get random entry
+        random_title = random.choice(entries) 
+        return redirect(reverse('entry', kwargs={'title':random_title}))
+    else:
+        return render(request, "encyclopedia/error.html", {
+            "message": "No entries available."
+        })   

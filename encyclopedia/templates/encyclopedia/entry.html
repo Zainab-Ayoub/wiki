@@ -5,10 +5,10 @@
 {% endblock %}
 
 {% block body %}
-    <a href="{% url 'edit_page' title=title %}" class='btn btn-primary text-white'>
-        Edit {{title}}
-    </a>
-    <h1>{{title}}</h1> 
     <p>{{content | safe}}</p>
-
+    <div class='d-flex'>
+        <a href="{% url 'edit_page' title=title %}" class='btn btn-primary text-white ml-auto'>
+            Edit {{title}}
+        </a>
+    </div>
 {% endblock %}
