@@ -18,7 +18,7 @@ textarea {
 }
 
 .main {
-    padding: 20px;
+    padding: 10px;
 }
 
 
@@ -37,11 +37,5 @@ textarea {
 
 .sidebar h2 {
     margin-top: 5px;
-}
-
-.form-container {
-    /* width: 100%;   */
-    max-width: 900px;  
-    padding: 20px;
 }
 

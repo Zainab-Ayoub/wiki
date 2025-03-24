@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.urls import reverse
 import markdown2
 from . import util
 
@@ -6,6 +7,7 @@ def index(request):
     return render(request, "encyclopedia/index.html", {
         "entries": util.list_entries()
     })
+
 
 def entry_page(request, title):
     entries = util.list_entries()
@@ -28,6 +30,7 @@ def entry_page(request, title):
     return render(request, 'encyclopedia/error.html', {
         'message':'Page not Found!'
     })
+    
     
 def search(request):
     # check if function is working
@@ -63,6 +66,7 @@ def search(request):
         'queryArray': queryArray,    
     })
     
+    
 def new_page(request):
     
     # print request method
@@ -93,3 +97,32 @@ def new_page(request):
         util.save_entry(title, content)
         
     return render(request, 'encyclopedia/new_page.html')
+
+
+def edit_entry(request, title):
+    
+    # print request method
+    print(f"Request Method: {request.method}") 
+    
+    if request.method == 'POST':
+        # check if request is received
+        print("POST request received!")
+        content = request.POST.get('content').strip()
+
+        # print content on console
+        print(f"Received Content: {content}")
+        
+        if not content:
+            return render(request, 'encyclopedia/error.html', {
+                'message' : 'Content cannot be empty.' 
+            })
+        
+        util.save_entry(title, content)
+        return redirect(reverse('entry', kwargs={'title':title}))
+        
+    content = util.get_entry(title)
+        
+    return render(request, 'encyclopedia/edit.html', {
+        'title': title,
+        'content': content
+    })
