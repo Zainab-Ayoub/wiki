@@ -4,6 +4,16 @@ import markdown2
 import random
 from . import util
 
+def markdownConversion(title):
+    entries = util.list_entries()
+    for entry in entries:
+        # print entry on  console
+        print(f"Checking entry: {entry}")
+                                                      
+        if entry.lower() == title.lower():
+            content = util.get_entry(entry)
+            return markdown2.markdown(content) if content else None
+    
 def index(request):
     return render(request, "encyclopedia/index.html", {
         "entries": util.list_entries()
@@ -12,20 +22,18 @@ def index(request):
 
 def entry_page(request, title):
     entries = util.list_entries()
-    
+    html_content = markdownConversion(title)
     for entry in entries:
         # print entry on  console
         print(f"Checking entry: {entry}")
                                                       
         if entry.lower() == title.lower():
             title = entry
-            content = util.get_entry(title)
-            content = markdown2.markdown(content)
             # print title and content on console
-            print(f"Title: {title}, Content: {content}") 
+            print(f"Title: {title}, Content: {html_content}") 
             return render(request, 'encyclopedia/entry.html', {
                 'title': title,
-                'content': content,    
+                'content': html_content,    
             })
         
     return render(request, 'encyclopedia/error.html', {
@@ -94,9 +102,18 @@ def new_page(request):
                 return render(request, 'encyclopedia/error.html', {
                     'message':'This entry already exists!'
                 })
-        formatted_content = f"# {title}\n\n{content}"
-        util.save_entry(title, formatted_content)
-        
+        util.save_entry(title, content)
+        html_content = markdownConversion(title)
+        html_content = markdownConversion(title)
+        if html_content is None:
+            return render(request, 'encyclopedia/error.html', {
+                'message': 'Page not Found!'
+            })
+        else:    
+            return render(request, 'encyclopedia/entry.html', {
+                'title' : title,
+                'content': html_content,
+            })
     return render(request, 'encyclopedia/new_page.html')
 
 
@@ -119,7 +136,7 @@ def edit_entry(request, title):
             })
         
         util.save_entry(title, content)
-        return redirect(reverse('entry', kwargs={'title':title}))
+        return redirect(reverse('entry', args=[title]))
         
     content = util.get_entry(title)
         

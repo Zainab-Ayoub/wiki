@@ -5,12 +5,12 @@
 {% endblock %}
 
 {% block body %}
-    <h1>Create a New Page</h1> 
+    <h1>Edit {{title}} Page</h1> 
     <form action="{% url 'edit_page' title=title %}" method='POST' class='form-container'>
         {% csrf_token %}
         <div>
             <label for='content'>Content:</label>
-            <textarea id='content' class='form-control form-control-lg' name='content'></textarea>
+            <textarea id='content' class='form-control' rows='10' name='content' placeholder='Edit Markdown Content'>{{content}}</textarea>
         </div>
         
         <br>
